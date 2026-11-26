@@ -2,10 +2,20 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/plus-jakarta-sans'
 import './index.css'
-import SignIn from './pages/SignIn.jsx'
+import './pages/pages.css'
+import App from './App.jsx'
+import { Router } from './router.jsx'
+import { StoreProvider } from './store.jsx'
+import { ToastProvider } from './components/Toast.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <SignIn />
+    <StoreProvider>
+      <Router>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
+      </Router>
+    </StoreProvider>
   </StrictMode>,
 )

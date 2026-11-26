@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { useRouter } from '../router.jsx'
+import { useStore } from '../store.jsx'
+import Sheet from '../components/Sheet.jsx'
+import Policies from '../components/Policies.jsx'
 import './SignIn.css'
 
 // Placeholder data until the referral lookup API exists in the backend.
@@ -14,8 +18,13 @@ const isValidContact = (value) => {
 
 export default function SignIn() {
   const [contact, setContact] = useState('98765 43210')
-  const [referralCode, setReferralCode] = useState('PRIYA482')
+  const { query, navigate } = useRouter()
+  const { actions } = useStore()
+  const [referralCode, setReferralCode] = useState(
+    () => query.get('ref')?.toUpperCase() ?? 'PRIYA482',
+  )
   const [error, setError] = useState('')
+  const [showPolicies, setShowPolicies] = useState(false)
 
   const referrer = REFERRERS[referralCode]
 
@@ -27,10 +36,11 @@ export default function SignIn() {
     }
     setError('')
     // TODO: call the send-OTP API here.
+    navigate('/verify', { onUpdate: () => actions.startLogin(contact.trim()) })
   }
 
   return (
-    <main className="signin">
+    <main className="screen signin">
       <header className="signin__hero">
         <div className="signin__logo" aria-hidden="true">
           <WasherIcon />
@@ -93,11 +103,21 @@ export default function SignIn() {
         <div className="signin__footer">
           <button type="submit">Send OTP</button>
           <p>
-            By continuing you accept the <a href="#terms">Terms</a> and{' '}
-            <a href="#privacy">Privacy Policy</a>
+            By continuing you accept the{' '}
+            <button type="button" onClick={() => setShowPolicies(true)}>
+              Terms
+            </button>{' '}
+            and{' '}
+            <button type="button" onClick={() => setShowPolicies(true)}>
+              Privacy Policy
+            </button>
           </p>
         </div>
       </form>
+
+      <Sheet open={showPolicies} title="Terms and privacy" onClose={() => setShowPolicies(false)}>
+        <Policies />
+      </Sheet>
     </main>
   )
 }
