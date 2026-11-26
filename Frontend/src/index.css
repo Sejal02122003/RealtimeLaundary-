@@ -1,0 +1,29 @@
+:root {
+  --blue: #1750d6;
+  --ink: #0f1b33;
+  --muted: #7b8499;
+  --border: #d3daea;
+  --tint: #f1f5fe;
+  --success-bg: #d8f5ea;
+  --success-ink: #0b5a47;
+  --error: #c62828;
+
+  font-family: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #e9edf5;
+}
+
+button,
+input {
+  font: inherit;
+}
