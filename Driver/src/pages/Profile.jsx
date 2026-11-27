@@ -12,6 +12,7 @@ const VEHICLE_TYPES = [
   { id: 'two_wheeler', label: 'Two wheeler' },
   { id: 'three_wheeler', label: 'Three wheeler' },
   { id: 'four_wheeler', label: 'Four wheeler' },
+  { id: 'van', label: 'Van' },
 ]
 
 const BADGES = {

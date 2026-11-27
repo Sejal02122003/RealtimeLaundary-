@@ -59,14 +59,17 @@ export default function JobDetail({ jobId }) {
             <h2 className="card__title">
               {job.status === 'offered' ? 'Waiting for your answer' : `Job ${job.status}`}
             </h2>
-            <p className="card__text">
-              {job.closedAt ? historyDetail(job, today) : 'Accept or decline it from the Jobs screen.'}
-            </p>
+            <p className="card__text">{closedNote(job, today)}</p>
           </div>
         </div>
       )}
     </main>
   )
+}
+
+function closedNote(job, today) {
+  if (job.status === 'cancelled') return 'The office removed this job. You do not need to do it.'
+  return job.closedAt ? historyDetail(job, today) : 'Accept or decline it from the Jobs screen.'
 }
 
 function ContactCard({ job }) {

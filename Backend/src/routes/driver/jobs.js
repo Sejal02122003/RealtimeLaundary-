@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { Job } = require('../../models/Job');
 const { upload } = require('../../middleware/upload');
+const { syncFromJob } = require('../../services/orders');
 const { checkFile, saveFile, removeFile } = require('../../utils/files');
 const { dayKey, atTime, addDays } = require('../../utils/time');
 const { HttpError, text, parseWholeNumber } = require('../../utils/http');
@@ -64,6 +65,7 @@ async function answerOffer(req, update) {
     returnDocument: 'after',
   });
   if (!job) throw new HttpError(409, 'This request is no longer available');
+  await syncFromJob(job);
   return job;
 }
 
@@ -74,7 +76,7 @@ router.post('/:id/accept', async (req, res) => {
 });
 
 router.post('/:id/decline', async (req, res) => {
-  const job = await answerOffer(req, { status: 'declined', closedAt: new Date() });
+  const job = await answerOffer(req, { status: 'declined', current: false, closedAt: new Date() });
   res.json({ job: job.toClient() });
 });
 
@@ -157,6 +159,7 @@ router.post('/:id/complete', upload.single('photo'), async (req, res) => {
     await removeFile(photo);
     throw new HttpError(409, 'This job is not open any more');
   }
+  await syncFromJob(completed);
   res.json({ job: completed.toClient() });
 });
 
@@ -166,10 +169,11 @@ router.post('/:id/missed', async (req, res) => {
 
   const job = await Job.findOneAndUpdate(
     { ...ownJob(req), status: 'assigned' },
-    { status: 'missed', missedReason: reason, closedAt: new Date() },
+    { status: 'missed', current: false, missedReason: reason, closedAt: new Date() },
     { returnDocument: 'after' },
   );
   if (!job) throw new HttpError(409, 'This job is not open any more');
+  await syncFromJob(job);
   res.json({ job: job.toClient() });
 });
 
