@@ -4,6 +4,9 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { connectDB } = require('./src/config/db');
+const { isOtpDemoMode, DEMO_OTP } = require('./src/config/env');
+const { notFound, errorHandler } = require('./src/middleware/errors');
+const driverRoutes = require('./src/routes/driver');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
@@ -18,6 +21,10 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+app.use('/api/driver', driverRoutes);
+app.use(notFound);
+app.use(errorHandler);
+
 async function startServer() {
   try {
     await connectDB();
@@ -28,6 +35,9 @@ async function startServer() {
 
   app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
+    if (isOtpDemoMode()) {
+      console.warn(`OTP demo mode is ON: every login OTP is ${DEMO_OTP}. Never use this in production.`);
+    }
   });
 }
 
