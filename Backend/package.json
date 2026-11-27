@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "seed:driver": "node src/scripts/seedDriver.js",
+    "seed:demo": "node src/scripts/seed.js",
+    "admin:create": "node src/scripts/createAdmin.js",
     "driver:approve": "node src/scripts/approveDriver.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

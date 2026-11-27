@@ -5,12 +5,15 @@ const jobSchema = new mongoose.Schema(
     orderId: { type: String, required: true },
     type: { type: String, enum: ['pickup', 'delivery'], required: true },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', required: true },
-    // offered -> assigned -> done | missed, or offered -> declined
+    // offered -> assigned -> done | missed, or offered -> declined.
+    // An admin can cancel a job that is still offered or assigned.
     status: {
       type: String,
-      enum: ['offered', 'assigned', 'done', 'missed', 'declined'],
+      enum: ['offered', 'assigned', 'done', 'missed', 'declined', 'cancelled'],
       default: 'offered',
     },
+    // False once a job has been replaced, so the order can be assigned again.
+    current: { type: Boolean, default: true },
     day: { type: String, required: true }, // "YYYY-MM-DD"
     slotLabel: { type: String, default: '' }, // pickups, e.g. "10 AM – 12 PM"
     dueAt: { type: Date, required: true },
@@ -51,7 +54,11 @@ const jobSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-jobSchema.index({ orderId: 1, type: 1 }, { unique: true });
+// One live pickup and one live delivery per order.
+jobSchema.index(
+  { orderId: 1, type: 1 },
+  { name: 'one_current_job', unique: true, partialFilterExpression: { current: true } },
+);
 jobSchema.index({ driver: 1, status: 1, closedAt: -1 });
 
 /** The job as the app sees it. The customer's OTP is never included. */

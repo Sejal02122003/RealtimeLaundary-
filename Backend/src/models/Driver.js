@@ -6,7 +6,7 @@ const DOCUMENT_TYPES = {
   registration: 'Vehicle registration',
 };
 
-const VEHICLE_TYPES = ['two_wheeler', 'three_wheeler', 'four_wheeler'];
+const VEHICLE_TYPES = ['two_wheeler', 'three_wheeler', 'four_wheeler', 'van'];
 
 const documentSchema = new mongoose.Schema(
   {
