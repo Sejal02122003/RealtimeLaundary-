@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from '../router.jsx'
-import Basket from '../components/Basket.jsx'
+import LaundryScene from '../components/LaundryScene.jsx'
 import Logo from '../components/Logo.jsx'
 import Policies from '../components/Policies.jsx'
 import Sheet from '../components/Sheet.jsx'
@@ -18,7 +18,7 @@ export default function Welcome() {
     <main className="screen welcome">
       <div className="welcome__hero">
         <Logo />
-        <Basket className="welcome__art" sparkle />
+        <LaundryScene />
       </div>
 
       <div className="welcome__body">
