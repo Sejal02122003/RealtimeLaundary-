@@ -1,7 +1,7 @@
 import { useRouter } from '../routes/router.jsx'
 import Icon from './Icon.jsx'
 
-/** Navy header with a back button, used by the detail screens. */
+/** Header with a back button, used by the detail screens. */
 export default function Header({ title, subtitle, fallback = '/jobs' }) {
   const { back } = useRouter()
 

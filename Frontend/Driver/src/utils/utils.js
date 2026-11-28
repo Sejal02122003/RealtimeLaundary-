@@ -78,3 +78,12 @@ export function historyDetail(job, today) {
 
 export const jobTitle = (job) =>
   `${job.type === 'pickup' ? 'Pickup' : 'Delivery'} #${job.orderId}`
+
+/** "RK" for "Ravi Kumar" */
+export const initials = (name) =>
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word.charAt(0))
+    .join('')
+    .toUpperCase()

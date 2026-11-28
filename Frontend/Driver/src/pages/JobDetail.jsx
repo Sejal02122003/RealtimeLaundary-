@@ -14,10 +14,12 @@ import {
 } from '../utils/utils.js'
 import { toFormData } from '../api/api.js'
 import Header from '../components/Header.jsx'
+import Icon from '../components/Icon.jsx'
 import LoadState from '../components/LoadState.jsx'
 import MapPreview from '../components/MapPreview.jsx'
 import PhotoPicker from '../components/PhotoPicker.jsx'
 import Sheet from '../components/Sheet.jsx'
+import Step from '../components/Step.jsx'
 import Stepper from '../components/Stepper.jsx'
 import { useToast } from '../components/Toast.jsx'
 
@@ -81,16 +83,23 @@ function ContactCard({ job }) {
 
   return (
     <section className="card contact">
-      <h2>{customer.name}</h2>
-      <p>
-        {customer.address}
-        {detail && ` · ${detail}`}
-      </p>
+      <div className="contact__who">
+        <Icon name="pin" />
+        <div>
+          <h2>{customer.name}</h2>
+          <p>
+            {customer.address}
+            {detail && ` · ${detail}`}
+          </p>
+        </div>
+      </div>
       <div className="contact__actions">
         <a className="button button--blue" href={mapsUrl(customer)} target="_blank" rel="noreferrer">
+          <Icon name="navigate" size={18} />
           Navigate
         </a>
         <a className="button button--soft" href={`tel:${customer.phone}`}>
+          <Icon name="phone" size={18} />
           Call customer
         </a>
       </div>
@@ -188,13 +197,15 @@ function JobForm({ job }) {
   return (
     <>
       <form className="screen__form" onSubmit={handleSubmit} noValidate>
-        <div className="screen__scroll job-detail">
+        <div className="screen__scroll job-detail stagger">
           {isPickup && <MapPreview customer={job.customer} />}
           <ContactCard job={job} />
 
           {isPickup && (
             <section className="card counts">
-              <h2>1. Count the clothes</h2>
+              <h2>
+                <Step number={1}>Count the clothes</Step>
+              </h2>
               {stepper('bags', 'Bags', 1, 50)}
               {stepper('pieces', 'Pieces', 1, 500)}
               {stepper('weightKg', 'Weight (kg)', 0, 200)}
@@ -204,7 +215,11 @@ function JobForm({ job }) {
           {isCod && (
             <section className="cash">
               <div className="cash__top">
-                <h2 id="cash-title">1. Collect cash</h2>
+                <h2>
+                  <Step number={1} id="cash-title">
+                    Collect cash
+                  </Step>
+                </h2>
                 <strong>{formatRupees(job.payment.amount)}</strong>
               </div>
               <div className="cash__options" role="group" aria-labelledby="cash-title">
@@ -235,17 +250,23 @@ function JobForm({ job }) {
           )}
 
           {!isPickup && !isCod && (
-            <p className="banner">Already paid. Do not collect cash.</p>
+            <p className="banner prepaid">
+              <Icon name="check" size={18} strokeWidth={2.8} />
+              Already paid. Do not collect cash.
+            </p>
           )}
 
           <PhotoPicker
-            label={`${photoStep}. Take ${job.type} photo`}
+            step={photoStep}
+            label={`Take ${job.type} photo`}
             photo={photo}
             onSelect={edit(setPhoto)}
           />
 
           <label className="otp">
-            {photoStep + 1}. {isPickup ? 'Ask customer for pickup OTP' : 'Enter delivery OTP'}
+            <Step number={photoStep + 1} done={otp.length === 4}>
+              {isPickup ? 'Ask customer for pickup OTP' : 'Enter delivery OTP'}
+            </Step>
             <input
               inputMode="numeric"
               autoComplete="off"

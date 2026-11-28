@@ -1,9 +1,10 @@
 import { Link, useRouter } from '../routes/router.jsx'
+import Icon from './Icon.jsx'
 
 const TABS = [
-  { label: 'Jobs', path: '/jobs' },
-  { label: 'History', path: '/history' },
-  { label: 'Profile', path: '/profile' },
+  { label: 'Jobs', icon: 'truck', path: '/jobs' },
+  { label: 'History', icon: 'receipt', path: '/history' },
+  { label: 'Profile', icon: 'user', path: '/profile' },
 ]
 
 // The profile screen has its own back button and save bar, so no tabs there.
@@ -21,6 +22,9 @@ export default function TabBar() {
           transition={tab.path === '/profile' ? 'forward' : 'fade'}
           aria-current={pathname === tab.path ? 'page' : undefined}
         >
+          <span>
+            <Icon name={tab.icon} size={20} />
+          </span>
           {tab.label}
         </Link>
       ))}

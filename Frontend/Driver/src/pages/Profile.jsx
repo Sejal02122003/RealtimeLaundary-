@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useRouter } from '../routes/router.jsx'
 import { useSession } from '../context/session.jsx'
 import { useResource } from '../hooks/useResource.js'
-import { dayKey, plural, shortDate, spacedPhone } from '../utils/utils.js'
+import { dayKey, initials, plural, shortDate, spacedPhone } from '../utils/utils.js'
 import { toFormData } from '../api/api.js'
 import Header from '../components/Header.jsx'
+import Icon from '../components/Icon.jsx'
 import LoadState from '../components/LoadState.jsx'
 import { useToast } from '../components/Toast.jsx'
 
@@ -50,6 +51,8 @@ function ProfileForm({ driver }) {
 
   const approved = driver.status === 'approved'
   const missing = driver.documents.filter((d) => d.status === 'missing' || d.status === 'rejected')
+  const uploaded = driver.documents.length - missing.length
+  const uploadedShare = uploaded / Math.max(driver.documents.length, 1)
 
   const upload = async (documentType, file) => {
     if (!file) return
@@ -83,10 +86,18 @@ function ProfileForm({ driver }) {
 
   return (
     <>
-      <Header title="My profile" subtitle={`${driver.name} · +91 ${spacedPhone(driver.phone)}`} />
+      <Header title="My profile" />
 
       <form className="screen__form" onSubmit={handleSubmit} noValidate>
-        <div className="screen__scroll">
+        <div className="screen__scroll stagger">
+          <div className="profile">
+            <span className="avatar avatar--large">{initials(driver.name)}</span>
+            <div>
+              <h2>{driver.name}</h2>
+              <p>+91 {spacedPhone(driver.phone)}</p>
+            </div>
+          </div>
+
           {!approved && (
             <div className="banner">
               <h2>Verification in progress</h2>
@@ -130,6 +141,16 @@ function ProfileForm({ driver }) {
           </div>
 
           <h2 className="section-title">Documents</h2>
+          <div
+            className={missing.length ? 'progress' : 'progress progress--done'}
+            role="progressbar"
+            aria-label="Documents uploaded"
+            aria-valuemin={0}
+            aria-valuemax={driver.documents.length}
+            aria-valuenow={uploaded}
+          >
+            <span style={{ width: `${uploadedShare * 100}%` }} />
+          </div>
           <ul className="documents">
             {driver.documents.map((document) => (
               <DocumentRow
@@ -149,7 +170,7 @@ function ProfileForm({ driver }) {
           )}
 
           {/* Clearing the session sends the app back to the login screen. */}
-          <button type="button" className="text-button logout" onClick={signOut}>
+          <button type="button" className="logout" onClick={signOut}>
             Log out
           </button>
         </div>
@@ -175,6 +196,7 @@ function DocumentRow({ document, busy, disabled, onSelect }) {
 
   return (
     <li className={needsUpload ? 'document document--missing' : 'document'}>
+      <Icon name="file" size={24} />
       <div>
         <h3>{label}</h3>
         <p>{detail}</p>

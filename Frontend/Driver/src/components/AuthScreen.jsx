@@ -3,8 +3,10 @@ import { api } from '../api/api.js'
 import { useRouter } from '../routes/router.jsx'
 import { useSession } from '../context/session.jsx'
 import { isValidPhone, phoneDigits, spacedPhone } from '../utils/utils.js'
+import Logo from '../../../User/src/components/Logo.jsx'
 import Icon from './Icon.jsx'
 import OtpFields, { useOtpRequest } from './OtpFields.jsx'
+import VanArt from './VanArt.jsx'
 
 const PHONE_KEY = 'freshfold-driver-phone'
 const DEMO_PHONE = '99887 76655'
@@ -21,7 +23,7 @@ function lastPhone() {
 
 /** Login and registration share the hero and the phone + OTP form. */
 export default function AuthScreen({ register = false }) {
-  const { navigate } = useRouter()
+  const { navigate, back } = useRouter()
   const { signIn } = useSession()
   const [name, setName] = useState('')
   const [phone, setPhone] = useState(() => (register ? '' : lastPhone()))
@@ -73,22 +75,23 @@ export default function AuthScreen({ register = false }) {
   return (
     <main className="screen auth">
       <header className={register ? 'auth__hero auth__hero--compact' : 'auth__hero'}>
-        <div className="auth__logo">
-          <Icon name="truck" size={34} strokeWidth={2.2} />
-        </div>
-        <h1>
-          FreshFold
-          <br />
-          Driver
-        </h1>
-        <p>
+        {register && (
+          <button type="button" className="auth__back" aria-label="Back" onClick={() => back('/')}>
+            <Icon name="back" size={22} strokeWidth={2.4} />
+          </button>
+        )}
+        <Logo />
+        <span className="auth__tag">Driver</span>
+        <VanArt className="auth__art" />
+      </header>
+
+      <form className="auth__form" onSubmit={handleSubmit} noValidate>
+        <h1>{register ? 'Become a driver' : 'Welcome back'}</h1>
+        <p className="auth__intro">
           {register
             ? 'Create your account, then upload your documents.'
             : 'Your pickups and deliveries, one job at a time.'}
         </p>
-      </header>
-
-      <form className="auth__form" onSubmit={handleSubmit} noValidate>
         {register && (
           <label className="field">
             Full name
