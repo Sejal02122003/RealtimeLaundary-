@@ -395,42 +395,133 @@ button:active:not(:disabled) {
 }
 
 /* ---------- Tab bar ---------- */
+/* A white bar level with the page. The selected tab's icon lifts into a circle
+   that sits in a notch, and both slide along when the tab changes. */
 .tabbar {
-  display: grid;
+  position: relative;
   flex-shrink: 0;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  padding: 8px 8px calc(10px + env(safe-area-inset-bottom));
+  padding: 0 10px calc(12px + env(safe-area-inset-bottom));
   background: #fff;
-  border-top: 1px solid var(--card-border);
   view-transition-name: tabbar;
 }
 
+/* Room under the page so the raised circle never hides the last item. */
+.app:has(> .tabbar) .screen__scroll {
+  padding-bottom: 34px;
+}
+
+.tabbar__bar {
+  /* Keeps the notch of the first and last tab clear of the rounded corners. */
+  --inset: 26px;
+  --slide: 420ms cubic-bezier(0.34, 1.25, 0.5, 1);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--tabs), minmax(0, 1fr));
+  height: 62px;
+  padding: 0 var(--inset);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgb(16 16 18 / 10%);
+}
+
+/* As wide as one tab, so moving it by 100% moves it exactly one tab. */
+.tabbar__cursor {
+  position: absolute;
+  top: 0;
+  left: var(--inset);
+  width: calc((100% - 2 * var(--inset)) / var(--tabs));
+  height: 0;
+  transform: translateX(calc(var(--active) * 100%));
+  transition: transform var(--slide);
+}
+
+/* The first path hides the straight top line, the second draws the curve. */
+.tabbar__notch {
+  position: absolute;
+  top: -1px;
+  left: calc(50% - 39px);
+}
+
+.tabbar__notch path:first-child {
+  fill: #fff;
+}
+
+.tabbar__notch path:last-child {
+  fill: none;
+  stroke: var(--border);
+}
+
+.tabbar__bubble {
+  position: absolute;
+  top: -21px;
+  left: calc(50% - 21px);
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgb(10 85 240 / 18%);
+}
+
 .tabbar a {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  color: var(--muted);
+  gap: 5px;
+  min-width: 0;
+  padding-top: 11px;
+  border-radius: 14px;
+  color: var(--subtle);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 14px;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.tabbar span {
+.tabbar__icon {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 29px;
-  border-radius: 15px;
-  transition: background-color 200ms ease;
+  width: 24px;
+  height: 24px;
+  transition:
+    transform var(--slide),
+    color 200ms ease;
+}
+
+.tabbar__icon svg {
+  fill: transparent;
+  transition: fill 200ms ease;
 }
 
 .tabbar a[aria-current='page'] {
   color: var(--ink);
+  font-weight: 700;
 }
 
-.tabbar a[aria-current='page'] span {
-  background: var(--ink);
-  color: #fff;
+/* 11px padding + half the icon: this puts the icon in the middle of the circle. */
+.tabbar a[aria-current='page'] .tabbar__icon {
+  color: var(--blue);
+  transform: translateY(-23px);
+}
+
+.tabbar a[aria-current='page'] svg {
+  fill: #c9dbff;
+}
+
+/* The old picture of the bar would show a second circle while the new one
+   slides, so it is only kept when the bar is leaving the screen. */
+::view-transition-old(tabbar) {
+  display: none;
+}
+
+::view-transition-old(tabbar):only-child {
+  display: block;
+}
+
+::view-transition-new(tabbar) {
+  animation: none;
 }
 
 /* ---------- Bottom sheet and forms ---------- */
@@ -560,7 +651,7 @@ button:active:not(:disabled) {
 .toast-region {
   position: fixed;
   right: 0;
-  bottom: 96px;
+  bottom: calc(112px + env(safe-area-inset-bottom));
   left: 0;
   display: flex;
   justify-content: center;
