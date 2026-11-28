@@ -189,7 +189,7 @@ function JobForm({ job }) {
     <>
       <form className="screen__form" onSubmit={handleSubmit} noValidate>
         <div className="screen__scroll job-detail">
-          {isPickup && <MapPreview />}
+          {isPickup && <MapPreview customer={job.customer} />}
           <ContactCard job={job} />
 
           {isPickup && (

@@ -1,0 +1,60 @@
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.picker__results {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.picker__results li + li {
+  border-top: 1px solid var(--border);
+}
+
+.picker__results button {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  background: #fff;
+  border: 0;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.picker__map {
+  position: relative;
+  flex-shrink: 0;
+  height: 200px;
+  overflow: hidden;
+  background: var(--fill);
+  border-radius: var(--radius);
+}
+
+.picker__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* The tip of the pin marks the exact centre of the map. */
+.picker__pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--blue);
+  pointer-events: none;
+  transform: translate(-50%, -90%);
+}
+
+.picker__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--subtle);
+  font-size: 13px;
+  font-weight: 600;
+}

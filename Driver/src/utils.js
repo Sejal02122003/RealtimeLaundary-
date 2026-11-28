@@ -52,10 +52,12 @@ export function jobWindow(job, today = dayKey(Date.now())) {
   return job.day === today ? time : `${shortDate(job.day)}, ${time}`
 }
 
-export const mapsUrl = ({ address, area }) => {
-  const destination = address.includes(area) ? address : `${address}, ${area}`
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`
-}
+/** A customer's address as one searchable line. */
+export const destinationOf = ({ address, area }) =>
+  address.includes(area) ? address : `${address}, ${area}`
+
+export const mapsUrl = (customer) =>
+  `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationOf(customer))}`
 
 function outcome(job) {
   if (job.status === 'missed') return job.missedReason

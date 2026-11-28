@@ -1,5 +1,27 @@
-/** A drawn illustration; "Navigate" opens the real map and route. */
-export default function MapPreview() {
+import { destinationOf } from '../utils.js'
+
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+
+/** The customer's address on a Google map; "Navigate" opens the route. */
+export default function MapPreview({ customer }) {
+  if (!API_KEY) return <Illustration />
+
+  const params = new URLSearchParams({ key: API_KEY, q: destinationOf(customer), zoom: '15' })
+
+  return (
+    <iframe
+      className="map map--live"
+      title={`Map of ${customer.name}'s address`}
+      src={`https://www.google.com/maps/embed/v1/place?${params}`}
+      loading="lazy"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+    />
+  )
+}
+
+/** Shown when no Maps API key is configured. */
+function Illustration() {
   return (
     <svg
       className="map"

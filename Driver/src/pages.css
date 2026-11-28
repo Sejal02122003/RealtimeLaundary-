@@ -267,6 +267,14 @@
   border-radius: 18px;
 }
 
+/* A live map needs more room than the illustration for Google's own controls. */
+.map--live {
+  flex-shrink: 0;
+  height: 200px;
+  background: #dcebe5;
+  border: 0;
+}
+
 .contact {
   padding: 13px 14px 14px;
 }
