@@ -13,13 +13,15 @@ npm run seed:demo     # demo data for this app and the admin panel, run once
 npm run dev           # http://localhost:5000
 ```
 
-Then the app, in a second terminal:
+Then the frontend, in a second terminal. One server runs all three apps:
 
 ```bash
-cd Frontend/Driver
+cd Frontend
 npm install
-npm run dev           # http://localhost:5174
+npm run dev
 ```
+
+Open http://localhost:5173/driver/.
 
 ## Demo accounts
 

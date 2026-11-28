@@ -2,7 +2,11 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { flushSync } from 'react-dom'
 
 const RouterContext = createContext(null)
-const currentUrl = () => window.location.pathname + window.location.search
+// The address this app is served under (see vite.config.js). Routes in the app
+// leave it out: "/jobs" shows as "/driver/jobs" in the address bar.
+const BASE = '/driver'
+const currentUrl = () =>
+  (window.location.pathname.slice(BASE.length) || '/') + window.location.search
 let activeTransition = null
 
 /**
@@ -54,7 +58,7 @@ export function Router({ children }) {
   const navigate = useCallback((to, { replace = false, transition = 'forward', onUpdate } = {}) => {
     if (to === urlRef.current) return
     if (!replace) indexRef.current += 1
-    window.history[replace ? 'replaceState' : 'pushState']({ idx: indexRef.current }, '', to)
+    window.history[replace ? 'replaceState' : 'pushState']({ idx: indexRef.current }, '', BASE + to)
     urlRef.current = to
     withTransition(transition, () => {
       onUpdate?.()
@@ -90,7 +94,7 @@ export function Link({ to, transition, children, ...props }) {
   }
 
   return (
-    <a href={to} onClick={handleClick} {...props}>
+    <a href={BASE + to} onClick={handleClick} {...props}>
       {children}
     </a>
   )

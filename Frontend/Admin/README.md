@@ -14,13 +14,15 @@ npm run admin:create -- you@example.com      # asks for a password (10+ characte
 npm run dev                                  # http://localhost:5000
 ```
 
-Then the panel, in a second terminal:
+Then the frontend, in a second terminal. One server runs all three apps:
 
 ```bash
-cd Frontend/Admin
+cd Frontend
 npm install
-npm run dev                                  # http://localhost:5175
+npm run dev
 ```
+
+Open http://localhost:5173/admin/.
 
 Run `admin:create` again with the same email to reset a password.
 
