@@ -35,7 +35,7 @@ export default function Refer() {
           </div>
           <button
             type="button"
-            className="primary-button primary-button--ink"
+            className="primary-button"
             onClick={() => shareInvite(user.referralCode, showToast)}
           >
             Share invite link
@@ -61,7 +61,7 @@ export default function Refer() {
             <button
               key={i}
               type="button"
-              className="option option--ink"
+              className="option"
               aria-pressed={level === i}
               onClick={() => setLevel(i)}
             >

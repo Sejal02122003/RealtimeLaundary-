@@ -3,6 +3,7 @@ import { Link, useRouter } from '../router.jsx'
 import { useDefaultAddress, useStore } from '../store.jsx'
 import { STAGES, TEAM } from '../data.js'
 import { formatRupees, shareInvite, toISODate } from '../utils.js'
+import Basket from '../components/Basket.jsx'
 import Icon from '../components/Icon.jsx'
 import WithdrawSheet from '../components/WithdrawSheet.jsx'
 import { useToast } from '../components/Toast.jsx'
@@ -34,52 +35,60 @@ export default function Home() {
   return (
     <main className="screen home">
       <div className="screen__scroll">
-        <header className="home__header">
-          <div>
-            <h1>Hi, {user.name.split(' ')[0]}</h1>
-            <p>
-              Pickup from {address.label}, {address.area}
-            </p>
-          </div>
-          <button
-            type="button"
-            className="home__bell"
-            aria-label={unread ? 'Notifications, unread' : 'Notifications'}
-            onClick={() => navigate('/account', { transition: 'fade' })}
-          >
-            <Icon name="bell" />
-            {unread && <span className="home__dot" />}
-          </button>
-        </header>
-
-        {order ? (
-          <Link to={`/orders/${order.id}`} className="order-banner">
-            <span className="order-banner__top">
-              <span>Order #{order.id}</span>
-              <span>Track ›</span>
-            </span>
-            <strong>
-              {STAGES[order.stage]}, {order.eta.startsWith('by') ? order.eta : `delivery ${order.eta}`}
-            </strong>
-            <span
-              className="order-banner__progress"
-              role="progressbar"
-              aria-label="Order progress"
-              aria-valuemin={0}
-              aria-valuemax={STAGES.length}
-              aria-valuenow={order.stage + 1}
+        <div className="home__hero">
+          <header className="home__header">
+            <div>
+              <h1>Hi, {user.name.split(' ')[0]}</h1>
+              <p>
+                Pickup from {address.label}, {address.area}
+              </p>
+            </div>
+            <button
+              type="button"
+              className="home__bell"
+              aria-label={unread ? 'Notifications, unread' : 'Notifications'}
+              onClick={() => navigate('/account', { transition: 'fade' })}
             >
-              {STAGES.map((stage, i) => (
-                <span key={stage} className={i <= order.stage ? 'is-done' : undefined} />
-              ))}
-            </span>
-          </Link>
-        ) : (
-          <Link to="/items" className="order-banner">
-            <span className="order-banner__top">No active orders</span>
-            <strong>Book your next pickup ›</strong>
-          </Link>
-        )}
+              <Icon name="bell" />
+              {unread && <span className="home__dot" />}
+            </button>
+          </header>
+
+          {order ? (
+            <Link to={`/orders/${order.id}`} className="order-banner">
+              <span className="order-banner__info">
+                <span className="order-banner__top">
+                  <span>Order #{order.id}</span>
+                  <span>Track ›</span>
+                </span>
+                <strong>
+                  {STAGES[order.stage]}, {order.eta.startsWith('by') ? order.eta : `delivery ${order.eta}`}
+                </strong>
+                <span
+                  className="order-banner__progress"
+                  role="progressbar"
+                  aria-label="Order progress"
+                  aria-valuemin={0}
+                  aria-valuemax={STAGES.length}
+                  aria-valuenow={order.stage + 1}
+                >
+                  {STAGES.map((stage, i) => (
+                    <span key={stage} className={i <= order.stage ? 'is-done' : undefined} />
+                  ))}
+                </span>
+              </span>
+              <Basket className="order-banner__art" />
+            </Link>
+          ) : (
+            <Link to="/items" className="order-banner">
+              <span className="order-banner__info">
+                <span className="order-banner__top">No active orders</span>
+                <strong>Book your next pickup ›</strong>
+              </span>
+              <Basket className="order-banner__art" />
+            </Link>
+          )}
+        </div>
 
         <div className="section-head">
           <h2>Book a service</h2>
@@ -126,7 +135,7 @@ export default function Home() {
           </button>
         </section>
 
-        <button type="button" className="primary-button primary-button--ink home__cta" onClick={() => navigate('/items')}>
+        <button type="button" className="primary-button home__cta" onClick={() => navigate('/items')}>
           Schedule a pickup
         </button>
       </div>

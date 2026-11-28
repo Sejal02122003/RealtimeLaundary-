@@ -1,20 +1,24 @@
 :root {
-  --blue: #1750d6;
-  --blue-soft: #e5eefd;
-  --ink: #0f1b33;
-  --muted: #7b8499;
-  --subtle: #66718a;
-  --border: #d3daea;
-  --card-border: #e1e7f2;
-  --surface: #f1f5fb;
-  --tint: #f1f5fe;
+  --blue: #0a55f0;
+  --blue-soft: #e8f0ff;
+  --ink: #101012;
+  --muted: #7c7f87;
+  --subtle: #62656d;
+  --fill: #f4f4f6;
+  --fill-strong: #ececee;
+  --border: #e3e3e7;
+  --card-border: #ececef;
+  --surface: #fff;
   --green: #0b6b52;
-  --success-bg: #d8f5ea;
+  --success-bg: #def5ec;
   --success-ink: #0b5a47;
   --error: #c62828;
-  --error-bg: #fde6e6;
-
-  font-family: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+  --error-bg: #fde8e8;
+  --radius: 18px;
+  --hero: linear-gradient(150deg, #0433c2 0%, #0a55f0 60%, #2f7bff 100%);
+  --hero-fade: linear-gradient(180deg, #0433c2 0%, #0b55ee 32%, #5b9bff 58%, #cfe2ff 82%, #fff 100%);
+  
+  font-family: 'Inter Variable', system-ui, sans-serif;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
 }
@@ -26,7 +30,7 @@
 }
 
 body {
-  background: #e9edf5;
+  background: #e6e8ee;
 }
 
 button,
@@ -70,6 +74,7 @@ ol {
   margin: 0 auto;
   overflow: hidden;
   background: var(--surface);
+  box-shadow: 0 0 40px rgb(16 16 18 / 8%);
 }
 
 .screen {
@@ -199,9 +204,8 @@ html[data-nav='fade']::view-transition-new(screen) {
 
 /* ---------- Shared components ---------- */
 .card {
-  background: #fff;
-  border: 1px solid var(--card-border);
-  border-radius: 18px;
+  background: var(--fill);
+  border-radius: 22px;
 }
 
 .muted {
@@ -210,17 +214,27 @@ html[data-nav='fade']::view-transition-new(screen) {
   font-weight: 500;
 }
 
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
 .page-title {
-  margin-bottom: 14px;
-  font-size: 24px;
-  font-weight: 800;
+  margin-bottom: 16px;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  font-weight: 700;
 }
 
 .section-title {
   display: block;
   margin: 18px 0 10px;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .section-head {
@@ -232,7 +246,7 @@ html[data-nav='fade']::view-transition-new(screen) {
 
 .section-head h2 {
   font-size: 15.5px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .primary-button,
@@ -243,9 +257,9 @@ html[data-nav='fade']::view-transition-new(screen) {
   justify-content: center;
   gap: 10px;
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: var(--radius);
   font-size: 13.5px;
-  font-weight: 700;
+  font-weight: 600;
   transition:
     transform 120ms ease,
     filter 120ms ease;
@@ -255,14 +269,9 @@ html[data-nav='fade']::view-transition-new(screen) {
   flex-shrink: 0;
   width: 100%;
   min-height: 55px;
-  border-radius: 16px;
-  background: var(--blue);
-  color: #fff;
-  font-size: 15.5px;
-}
-
-.primary-button--ink {
   background: var(--ink);
+  color: #fff;
+  font-size: 15px;
 }
 
 .primary-button--danger {
@@ -276,8 +285,12 @@ html[data-nav='fade']::view-transition-new(screen) {
 .soft-button {
   min-height: 44px;
   padding: 0 18px;
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--fill-strong);
+}
+
+/* Grey on grey would disappear, so these turn white inside cards. */
+.card .soft-button {
+  background: #fff;
 }
 
 .outline-button {
@@ -318,7 +331,7 @@ button:active:not(:disabled) {
   border-radius: 50%;
   color: var(--blue);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .avatar--small {
@@ -350,7 +363,7 @@ button:active:not(:disabled) {
 }
 
 .rows li + li {
-  border-top: 1px solid var(--surface);
+  border-top: 1px solid var(--border);
 }
 
 .rows li > div {
@@ -397,9 +410,9 @@ button:active:not(:disabled) {
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  color: #475273;
+  color: var(--muted);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .tabbar span {
@@ -412,11 +425,12 @@ button:active:not(:disabled) {
 }
 
 .tabbar a[aria-current='page'] {
-  color: var(--blue);
+  color: var(--ink);
 }
 
 .tabbar a[aria-current='page'] span {
-  background: var(--blue-soft);
+  background: var(--ink);
+  color: #fff;
 }
 
 /* ---------- Bottom sheet and forms ---------- */
@@ -426,7 +440,7 @@ button:active:not(:disabled) {
   max-height: 85dvh;
   margin: auto auto 0;
   border: 0;
-  border-radius: 24px 24px 0 0;
+  border-radius: 28px 28px 0 0;
   background: #fff;
   color: var(--ink);
 }
@@ -458,7 +472,7 @@ button:active:not(:disabled) {
 
 .sheet__head h2 {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .form {
@@ -478,10 +492,11 @@ button:active:not(:disabled) {
 .form input,
 .form textarea {
   width: 100%;
-  min-height: 48px;
+  min-height: 50px;
   padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: var(--fill);
+  border: 1px solid transparent;
+  border-radius: 16px;
   font-size: 16px;
   font-weight: 600;
   resize: vertical;
@@ -511,9 +526,9 @@ button:active:not(:disabled) {
   flex-direction: column;
   gap: 2px;
   padding: 14px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: var(--fill);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
   text-align: left;
   font-size: 14px;
 }
@@ -531,7 +546,7 @@ button:active:not(:disabled) {
 .policies h3 {
   margin-top: 14px;
   font-size: 13.5px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .policies p {

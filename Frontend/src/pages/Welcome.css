@@ -1,0 +1,73 @@
+.screen.welcome {
+  overflow-y: auto;
+  background: #fff;
+}
+
+.welcome__hero {
+  display: flex;
+  flex: 1 0 300px;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(36px + env(safe-area-inset-top)) 20px 0;
+  background: var(--hero-fade);
+  color: #fff;
+}
+
+/* Takes whatever height is left, so short screens shrink the art first. */
+.welcome__art {
+  flex: 1 1 0;
+  width: 100%;
+  min-height: 0;
+  margin-top: 12px;
+}
+
+.welcome__art .sparkle {
+  transform-origin: 273px 61px;
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  50% {
+    transform: scale(0.82);
+  }
+}
+
+.welcome__body {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  padding: 26px 20px calc(20px + env(safe-area-inset-bottom));
+  text-align: center;
+}
+
+.welcome__body h1 {
+  margin-bottom: 30px;
+  font-size: clamp(23px, 7.2vw, 29px);
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.6px;
+}
+
+.welcome__body .soft-button {
+  min-height: 55px;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.welcome__body p {
+  max-width: 280px;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.welcome__body p button {
+  background: none;
+  border: 0;
+  color: inherit;
+}
+
+.welcome__body p button:hover {
+  text-decoration: underline;
+}

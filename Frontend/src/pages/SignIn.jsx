@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from '../router.jsx'
 import { useStore } from '../store.jsx'
+import Basket from '../components/Basket.jsx'
+import Icon from '../components/Icon.jsx'
+import Logo from '../components/Logo.jsx'
 import Sheet from '../components/Sheet.jsx'
 import Policies from '../components/Policies.jsx'
 import './SignIn.css'
@@ -18,7 +21,8 @@ const isValidContact = (value) => {
 
 export default function SignIn() {
   const [contact, setContact] = useState('98765 43210')
-  const { query, navigate } = useRouter()
+  const { pathname, query, navigate, back } = useRouter()
+  const isSignUp = pathname === '/signup'
   const { actions } = useStore()
   const [referralCode, setReferralCode] = useState(
     () => query.get('ref')?.toUpperCase() ?? 'PRIYA482',
@@ -26,7 +30,7 @@ export default function SignIn() {
   const [error, setError] = useState('')
   const [showPolicies, setShowPolicies] = useState(false)
 
-  const referrer = REFERRERS[referralCode]
+  const referrer = isSignUp ? REFERRERS[referralCode] : null
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -42,19 +46,16 @@ export default function SignIn() {
   return (
     <main className="screen signin">
       <header className="signin__hero">
-        <div className="signin__logo" aria-hidden="true">
-          <WasherIcon />
-        </div>
-        <h1>
-          Laundry picked up.
-          <br />
-          Rewards earned.
-        </h1>
-        <p>FreshFold collects, cleans and delivers to your door.</p>
+        <button type="button" className="signin__back" aria-label="Back" onClick={() => back('/')}>
+          <Icon name="back" size={22} strokeWidth={2.4} />
+        </button>
+        <Logo />
+        <Basket className="signin__art" sparkle />
       </header>
 
       <form className="signin__form" onSubmit={handleSubmit} noValidate>
-        <h2>Sign in or create account</h2>
+        <h1>{isSignUp ? 'Create your account' : 'Welcome back'}</h1>
+        <p className="signin__intro">We will send you a one-time code.</p>
 
         <label htmlFor="contact">Mobile number or email</label>
         <input
@@ -77,31 +78,37 @@ export default function SignIn() {
           </p>
         )}
 
-        <label htmlFor="referral">Referral code (optional)</label>
-        <input
-          id="referral"
-          className="field field--referral"
-          type="text"
-          autoComplete="off"
-          autoCapitalize="characters"
-          spellCheck="false"
-          maxLength={12}
-          placeholder="ENTER CODE"
-          value={referralCode}
-          onChange={(e) => setReferralCode(e.target.value.toUpperCase().trim())}
-        />
+        {isSignUp && (
+          <>
+            <label htmlFor="referral">Referral code (optional)</label>
+            <input
+              id="referral"
+              className="field field--referral"
+              type="text"
+              autoComplete="off"
+              autoCapitalize="characters"
+              spellCheck="false"
+              maxLength={12}
+              placeholder="ENTER CODE"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value.toUpperCase().trim())}
+            />
 
-        <div aria-live="polite">
-          {referrer && (
-            <p className="signin__referrer">
-              <CheckIcon />
-              You are joining {referrer}&apos;s network
-            </p>
-          )}
-        </div>
+            <div aria-live="polite">
+              {referrer && (
+                <p className="signin__referrer">
+                  <CheckIcon />
+                  You are joining {referrer}&apos;s network
+                </p>
+              )}
+            </div>
+          </>
+        )}
 
         <div className="signin__footer">
-          <button type="submit">Send OTP</button>
+          <button type="submit" className="primary-button">
+            Send OTP
+          </button>
           <p>
             By continuing you accept the{' '}
             <button type="button" onClick={() => setShowPolicies(true)}>
@@ -119,16 +126,6 @@ export default function SignIn() {
         <Policies />
       </Sheet>
     </main>
-  )
-}
-
-function WasherIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-      <rect x="3.5" y="2.5" width="17" height="19" rx="3.5" />
-      <circle cx="12" cy="13" r="4.5" />
-      <path d="M7.5 6.5h.01" strokeLinecap="round" />
-    </svg>
   )
 }
 

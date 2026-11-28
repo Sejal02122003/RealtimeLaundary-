@@ -138,11 +138,11 @@ export async function copyText(text) {
 
 export async function shareInvite(code, showToast) {
   const url = `${window.location.origin}/?ref=${code}`
-  const text = `Join FreshFold with my code ${code}`
+  const text = `Join Realtime with my code ${code}`
 
   if (navigator.share) {
     try {
-      await navigator.share({ title: 'FreshFold', text, url })
+      await navigator.share({ title: 'Realtime', text, url })
       return
     } catch (err) {
       if (err.name === 'AbortError') return

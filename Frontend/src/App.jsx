@@ -1,6 +1,7 @@
 import { Redirect, useRouter } from './router.jsx'
 import { useStore } from './store.jsx'
 import TabBar, { TABS } from './components/TabBar.jsx'
+import Welcome from './pages/Welcome.jsx'
 import SignIn from './pages/SignIn.jsx'
 import Verify from './pages/Verify.jsx'
 import Home from './pages/Home.jsx'
@@ -13,7 +14,12 @@ import Refer from './pages/Refer.jsx'
 import Wallet from './pages/Wallet.jsx'
 import Account from './pages/Account.jsx'
 
-const PUBLIC_ROUTES = { '/': SignIn, '/verify': Verify }
+const PUBLIC_ROUTES = {
+  '/': Welcome,
+  '/signin': SignIn,
+  '/signup': SignIn,
+  '/verify': Verify,
+}
 
 const PRIVATE_ROUTES = {
   '/home': Home,
